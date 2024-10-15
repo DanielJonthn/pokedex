@@ -1,2 +1,13 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+  const testing: string = "Pokedex";
+</script>
+
+<h1>Welcome to {testing}</h1>
+<p>Pokemons</p>
+
+<style>
+  h1 {
+    color: orange;
+    text-align: center;
+  }
+</style>
