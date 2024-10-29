@@ -1,9 +1,21 @@
 <script lang="ts">
-  const testing: string = "Pokedex";
+  import type { PageData } from "./$types";
+  import { generations } from "$lib/types/generations";
+
+  export let data: PageData;
 </script>
 
-<h1>Welcome to {testing}</h1>
-<p>Pokemons</p>
+<h1>Welcome to Pokedex</h1>
+
+{#each data.pokemon as pokemon (pokemon.id)}
+  <p>{pokemon.id}: {pokemon.name}</p>
+{/each}
+
+{#each generations as gen (gen.id)}
+  <h2>{gen.name}</h2>
+  <p>Games: {gen.games.join(", ")}</p>
+  <p>Region: {gen.main_region}</p>
+{/each}
 
 <style>
   h1 {
