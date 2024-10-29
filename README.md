@@ -1,38 +1,62 @@
-# create-svelte
+# Pokedex Web Application
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+A responsive, interactive Pokedex web application designed to help you explore and learn about Pokémon! This project offers filtering by type, region, and game generation, while also having a search feature and infinite scroll for seamless browsing.
 
-## Creating a project
+## 🚀 Deployed Website
 
-If you're seeing this, you've probably already done this step. Congrats!
+Check out the live version here: [Pokedex Website]()
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+---
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## 🛠️ Getting Started
 
-## Developing
+Follow these steps to set up the Pokedex application on your local machine:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Prerequisites
+
+Ensure you have these tools installed on your local machine:
+
+- [Node.js](https://nodejs.org/) (version 20.11.0 or above)
+- [NPM](https://www.npmjs.com/) (version 9.8.1 or above)
+
+### Installation
+
+1. **Clone the Repository**
+   Start by cloning the repository to your local machine:
+   ```bash
+   git clone https://github.com/DanielJonthn/pokedex.git
+   cd pokedex
+   ```
+2. **Install Dependencies**
+   Install the necessary packages by running:
+   ```bash
+   npm install
+   ```
+
+### Running the Application
+
+To start the development server, run:
 
 ```bash
 npm run dev
+```
 
-# or start the server and open the app in a new browser tab
+Open your browser and navigate to http://localhost:5173 to view the application.
+
+**Alternatively,**
+
+You can start the server and open the app in a new browser tab automatically with:
+
+```bash
 npm run dev -- --open
 ```
 
-## Building
+The app will be displayed at http://localhost:5173.
 
-To create a production version of your app:
+---
 
-```bash
-npm run build
-```
+## 📖 Project Features
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- Pokémon Search and Filter: Effortlessly search and filter Pokémon by type, region, and generation, making it easy to find your favorites.
+- Infinite Scroll: Enjoy a smooth browsing experience with continuous loading of Pokémon as you scroll.
+- Mobile-Friendly: The application is fully responsive, ensuring an optimal user experience on mobile, tablet, and desktop devices.
