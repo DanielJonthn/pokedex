@@ -7,19 +7,24 @@
 
 <h1>Welcome to Pokedex</h1>
 
-{#each data.pokemon as pokemon (pokemon.id)}
-  <p>{pokemon.id}: {pokemon.name}</p>
-{/each}
+<div class="container">
+  <div class="grid">
+    {#each generations as gen (gen.id)}
+      <div class="gens">{gen.main_region}</div>
+    {/each}
+  </div>
 
-{#each generations as gen (gen.id)}
-  <h2>{gen.name}</h2>
-  <p>Games: {gen.games.join(", ")}</p>
-  <p>Region: {gen.main_region}</p>
-{/each}
-
-<style>
-  h1 {
-    color: orange;
-    text-align: center;
-  }
-</style>
+  <div class="grid">
+    {#each data.pokemon as pokemon (pokemon.id)}
+      <div class="cards">
+        <div class="cards-id">
+          {pokemon.id}
+        </div>
+        <div class="cards-content">
+          <img src={pokemon.image} alt={pokemon.name} />
+          {pokemon.name}
+        </div>
+      </div>
+    {/each}
+  </div>
+</div>

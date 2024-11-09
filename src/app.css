@@ -1,0 +1,46 @@
+/* Global */
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Generations */
+.gens {
+  margin: 0.3125rem;
+  padding: 0.3125rem 0.625rem;
+  border: 1px solid black;
+  border-radius: 20px;
+  background-color: #f9f9f9;
+}
+.gens:hover {
+  background-color: #eee;
+}
+
+/* Pokemons */
+.cards {
+  width: 7.8125rem;
+  margin: 0.625rem;
+  padding: 0.625rem;
+  background-color: #eee;
+}
+.cards:hover {
+  background-color: #ddd;
+}
+.cards-id {
+  display: flex;
+  align-items: start;
+}
+.cards-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
