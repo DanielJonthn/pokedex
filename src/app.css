@@ -37,10 +37,12 @@
 
 /* Pokemons */
 .cards {
+  all: unset;
   width: 7.8125rem;
   margin: 0.625rem;
   padding: 0.625rem;
   background-color: #eee;
+  cursor: pointer;
 }
 .cards:hover {
   background-color: #ddd;

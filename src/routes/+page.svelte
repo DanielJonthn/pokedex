@@ -111,7 +111,7 @@
 
   <div class="grid">
     {#each filteredPokemon as pokemon (pokemon.id)}
-      <div class="cards" on:click={() => detailHandler(pokemon)}>
+      <button class="cards" on:click={() => detailHandler(pokemon)}>
         <div class="cards-id">
           {pokemon.id}
         </div>
@@ -119,7 +119,7 @@
           <img src={pokemon.image} alt={pokemon.name} />
           {pokemon.name}
         </div>
-      </div>
+      </button>
     {/each}
   </div>
 </div>
