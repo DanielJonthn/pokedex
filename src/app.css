@@ -13,6 +13,11 @@
   justify-content: center;
 }
 
+.title {
+  display: flex;
+  justify-self: center;
+}
+
 /* Generations */
 .gens {
   margin: 0.3125rem;
@@ -20,9 +25,14 @@
   border: 1px solid black;
   border-radius: 20px;
   background-color: #f9f9f9;
+  cursor: pointer;
 }
 .gens:hover {
   background-color: #eee;
+}
+
+.gens-selected button.active {
+  background-color: #ddd;
 }
 
 /* Pokemons */
@@ -43,4 +53,237 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* Search & Filters */
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-bar {
+  flex-grow: 1;
+  padding: 8px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.filter-button {
+  background: #eee;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.filter-dropdown label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+/* Pokemon Details */
+.back-button {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.back-button:hover {
+  background: #ff5252;
+}
+
+.title-detail {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.pokemon-id {
+  color: #777;
+  font-size: 1.2rem;
+}
+
+.details-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  padding: 20px;
+}
+
+/* Image Section */
+.image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pokemon-image {
+  width: 250px;
+  filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.2));
+}
+
+/* Details Card */
+.details-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  min-width: 300px;
+}
+.details-card h2 {
+  margin-top: 10px;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 5px;
+}
+
+/* Type Badges */
+.types {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.type-badge {
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+  text-transform: capitalize;
+  font-size: 0.9rem;
+}
+
+/* Pokémon Type Colors */
+.normal {
+  background-color: #a8a77a;
+}
+.fire {
+  background-color: #ee8130;
+}
+.water {
+  background-color: #6390f0;
+}
+.electric {
+  background-color: #f7d02c;
+}
+.grass {
+  background-color: #7ac74c;
+}
+.ice {
+  background-color: #96d9d6;
+}
+.fighting {
+  background-color: #c22e28;
+}
+.poison {
+  background-color: #a33ea1;
+}
+.ground {
+  background-color: #e2bf65;
+}
+.flying {
+  background-color: #a98ff3;
+}
+.psychic {
+  background-color: #f95587;
+}
+.bug {
+  background-color: #a6b91a;
+}
+.rock {
+  background-color: #b6a136;
+}
+.ghost {
+  background-color: #735797;
+}
+.dragon {
+  background-color: #6f35fc;
+}
+.dark {
+  background-color: #705746;
+}
+.steel {
+  background-color: #b7b7ce;
+}
+.fairy {
+  background-color: #d685ad;
+}
+
+/* Stats */
+.stats-list {
+  list-style: none;
+  padding: 0;
+}
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  margin: 5px 0;
+}
+.stat-name {
+  width: 100px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.stat-bar {
+  flex: 1;
+  height: 8px;
+  background: #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.stat-fill {
+  height: 100%;
+  background: #4caf50;
+}
+.stat-value {
+  min-width: 30px;
+  text-align: right;
+}
+
+/* Abilities */
+.abilities-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+.ability {
+  font-size: 1rem;
+  text-transform: capitalize;
+  background: #eee;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 2px;
 }
