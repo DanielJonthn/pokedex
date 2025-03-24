@@ -15,39 +15,48 @@
   let filteredPokemon: IndexPokemon[] = [];
 
   onMount(async () => {
-    await initializeStores();
-    isLoading = false;
+    try {
+      await initializeStores();
+    } catch (error) {
+      console.error("Failed to initialize stores:", error);
+    } finally {
+      isLoading = false;
+    }
   });
 
   $: {
     if (data.pokemon) {
-      filteredPokemon = data.pokemon.filter((pokemon) => {
-        const matchesSearch = pokemon.name
-          .toLowerCase()
-          .includes($filterStore.searchQuery.toLowerCase());
+      const searchMatches = $filterStore.searchQuery
+        ? data.pokemon.filter((p) =>
+            p.name
+              .toLowerCase()
+              .includes($filterStore.searchQuery.toLowerCase())
+          )
+        : data.pokemon;
 
-        const matchesRegion =
-          $filterStore.selectedRegions.length === 0 ||
-          $filterStore.selectedRegions.some((region) => {
-            const regionData = data.generations.find(
-              (gen) => gen.main_region === region
-            );
-            return regionData?.pokemon_species?.includes(
-              pokemon.name.toLowerCase()
-            );
-          });
+      const regionMatches = $filterStore.selectedRegions.length
+        ? searchMatches.filter((pokemon) =>
+            $filterStore.selectedRegions.some((region) => {
+              const regionData = data.generations.find(
+                (gen) => gen.main_region === region
+              );
+              return regionData?.pokemon_species?.includes(
+                pokemon.name.toLowerCase()
+              );
+            })
+          )
+        : searchMatches;
 
-        const matchesType =
-          $filterStore.selectedTypes.length === 0 ||
-          $filterStore.selectedTypes.some((type) => {
-            const typeData = data.pokemonTypes.find((t) => t.name === type);
-            return typeData?.pokemon_species?.includes(
-              pokemon.name.toLowerCase()
-            );
-          });
-
-        return matchesSearch && matchesRegion && matchesType;
-      });
+      filteredPokemon = $filterStore.selectedTypes.length
+        ? regionMatches.filter((pokemon) =>
+            $filterStore.selectedTypes.some((type) => {
+              const typeData = data.pokemonTypes.find((t) => t.name === type);
+              return typeData?.pokemon_species?.includes(
+                pokemon.name.toLowerCase()
+              );
+            })
+          )
+        : regionMatches;
     }
   }
 
