@@ -47,10 +47,8 @@
     updateFilters();
   }
 
-  function resetFilters() {
+  function resetSearch() {
     searchQuery = "";
-    selectedRegions = [];
-    selectedTypes = [];
     updateFilters();
   }
 
@@ -96,9 +94,9 @@
       />
       <button
         class="clear-btn"
-        on:click={resetFilters}
-        aria-label="Clear filters"
-        title="Clear filters"
+        on:click={resetSearch}
+        aria-label="Clear search"
+        title="Clear search"
       >
         {#if searchQuery || selectedRegions.length > 0 || selectedTypes.length > 0}
           ×
