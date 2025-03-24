@@ -1,5 +1,3 @@
-import { fetchPokemonTypes } from "$lib/api/pokemon";
-
 export type Pokemon = {
   name: string;
   url: string;
@@ -26,4 +24,41 @@ export type PokemonTypeCategory = {
   pokemon_species?: string[];
 };
 
-export const pokemonTypes: PokemonTypeCategory[] = await fetchPokemonTypes();
+export type PokemonDetail = {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  types: PokemonType[];
+  stats: PokemonStat[];
+  abilities: PokemonAbility[];
+  moves: any;
+  sprites: {
+    front_default: string;
+    other?: {
+      "official-artwork"?: {
+        front_default: string;
+      };
+    };
+  };
+};
+
+export type PokemonStat = {
+  base_stat: number;
+  percentage: number;
+  stat: {
+    name: string;
+  };
+};
+
+export type PokemonAbility = {
+  ability: {
+    name: string;
+    url: string;
+  };
+  is_hidden: boolean;
+};
+
+export function isPokemonDetail(obj: any): obj is PokemonDetail {
+  return obj && typeof obj === "object" && "types" in obj && "stats" in obj;
+}
