@@ -48,6 +48,91 @@
       });
     }
   }
+
+  // Infinite Scroll
+  let visiblePokemon: IndexPokemon[] = [];
+  let pageSize = 24; // Show 24 Pokémon at a time
+  let currentPage = 1;
+  let isLoadingMore = false;
+  let hasMore = true;
+
+  // Initialize the visible Pokémon
+  $: {
+    if (filteredPokemon) {
+      // Reset pagination when filters change
+      if (
+        visiblePokemon.length > 0 &&
+        visiblePokemon[0]?.id !== filteredPokemon[0]?.id
+      ) {
+        currentPage = 1;
+        hasMore = true;
+      }
+
+      visiblePokemon = filteredPokemon.slice(0, pageSize * currentPage);
+      hasMore = visiblePokemon.length < filteredPokemon.length;
+    }
+  }
+
+  // Function to load more Pokémon
+  async function loadMorePokemon() {
+    if (isLoadingMore || !hasMore) return;
+
+    isLoadingMore = true;
+
+    try {
+      // Simulate a delay for loading effect
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // Increment the page and update visiblePokemon
+      currentPage++;
+      visiblePokemon = filteredPokemon.slice(0, pageSize * currentPage);
+      hasMore = visiblePokemon.length < filteredPokemon.length;
+    } finally {
+      isLoadingMore = false;
+    }
+  }
+
+  // Intersection Observer for infinite scroll
+  let observerTarget: HTMLDivElement;
+
+  onMount(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && !isLoadingMore && hasMore) {
+          loadMorePokemon();
+        }
+      },
+      { rootMargin: "200px" } // Load more when within 200px of the bottom
+    );
+
+    if (observerTarget) {
+      observer.observe(observerTarget);
+    }
+
+    return () => {
+      if (observerTarget) {
+        observer.unobserve(observerTarget);
+      }
+    };
+  });
+
+  let showScrollButton = false;
+
+  onMount(() => {
+    // Detect scroll position for showing/hiding the button
+    window.addEventListener("scroll", () => {
+      showScrollButton = window.scrollY > 500;
+    });
+  });
+
+  // Function to smoothly scroll to top
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
 </script>
 
 <svelte:head>
@@ -92,13 +177,32 @@
       </button>
     </div>
   {:else}
-    <div class="pokemon-grid" in:fade={{ duration: 300 }}>
+    <!-- <div class="pokemon-grid" in:fade={{ duration: 300 }}>
       {#each filteredPokemon as pokemon, i (pokemon.id)}
         <div in:fly={{ y: 20, duration: 300, delay: (i % 10) * 50 }}>
           <PokemonCard {pokemon} />
         </div>
       {/each}
+    </div> -->
+    <div class="pokemon-grid" in:fade={{ duration: 300 }}>
+      {#each visiblePokemon as pokemon, i (pokemon.id)}
+        <div in:fly={{ y: 20, duration: 300, delay: (i % 10) * 50 }}>
+          <PokemonCard {pokemon} />
+        </div>
+      {/each}
     </div>
+
+    <!-- Loading indicator at the bottom -->
+    {#if hasMore}
+      <div class="load-more-container" bind:this={observerTarget}>
+        <div class="spinner small"></div>
+        <p>Loading more Pokémon...</p>
+      </div>
+    {:else if visiblePokemon.length > 0}
+      <div class="end-message">
+        <p>You've reached the end! {visiblePokemon.length} Pokémon loaded.</p>
+      </div>
+    {/if}
   {/if}
 
   <footer>
@@ -111,6 +215,30 @@
       >
     </p>
   </footer>
+
+  {#if showScrollButton}
+    <button
+      class="scroll-top-button"
+      on:click={scrollToTop}
+      in:fade={{ duration: 200 }}
+      out:fade={{ duration: 200 }}
+      aria-label="Scroll to top"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="18 15 12 9 6 15"></polyline>
+      </svg>
+    </button>
+  {/if}
 </div>
 
 <style>
@@ -252,5 +380,56 @@
   footer a:hover {
     color: #2a5a9c;
     text-decoration: underline;
+  }
+
+  /* Infinite Scroll */
+  .load-more-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 0;
+  }
+
+  .spinner.small {
+    width: 25px;
+    height: 25px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top: 3px solid #3d7dca;
+    margin-bottom: 10px;
+  }
+
+  .end-message {
+    text-align: center;
+    color: #666;
+    padding: 20px 0;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .scroll-top-button {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 45px;
+    height: 45px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .scroll-top-button:hover {
+    transform: translateY(-3px);
+    background-color: #2a5a9c;
   }
 </style>

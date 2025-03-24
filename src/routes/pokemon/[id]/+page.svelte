@@ -3,6 +3,7 @@
   import { goto } from "$app/navigation";
   import type { PageData } from "./$types";
   import TypeBadge from "$lib/components/TypeBadge.svelte";
+  import { browser } from "$app/environment";
 
   export let data: PageData;
 
@@ -14,7 +15,11 @@
   });
 
   const goBack = () => {
-    goto("/");
+    if (browser) {
+      window.history.back();
+    } else {
+      goto("/");
+    }
   };
 
   const formatStatName = (name: string): string => {
