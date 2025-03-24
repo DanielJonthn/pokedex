@@ -77,7 +77,7 @@
         hasMore = true;
       }
 
-      visiblePokemon = filteredPokemon.slice(0, pageSize * currentPage);
+      visiblePokemon = [...filteredPokemon.slice(0, pageSize * currentPage)];
       hasMore = visiblePokemon.length < filteredPokemon.length;
     }
   }
@@ -91,8 +91,10 @@
       await new Promise((resolve) => setTimeout(resolve, 300));
 
       currentPage++;
-      visiblePokemon = filteredPokemon.slice(0, pageSize * currentPage);
+      visiblePokemon = [...filteredPokemon.slice(0, pageSize * currentPage)];
       hasMore = visiblePokemon.length < filteredPokemon.length;
+    } catch (error) {
+      console.error("Error loading more Pokémon:", error);
     } finally {
       isLoadingMore = false;
     }
@@ -111,9 +113,12 @@
       { rootMargin: "200px" }
     );
 
-    if (observerTarget) {
-      observer.observe(observerTarget);
-    }
+    const checkObserverTarget = setInterval(() => {
+      if (observerTarget) {
+        observer.observe(observerTarget);
+        clearInterval(checkObserverTarget);
+      }
+    }, 100);
 
     return () => {
       if (observerTarget) {
@@ -124,10 +129,18 @@
 
   let showScrollButton = false;
 
+  function handleScroll() {
+    showScrollButton = window.scrollY > 500;
+
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const pageHeight = document.body.offsetHeight;
+    if (scrollPosition >= pageHeight - 100 && hasMore) {
+      loadMorePokemon();
+    }
+  }
+
   onMount(() => {
-    window.addEventListener("scroll", () => {
-      showScrollButton = window.scrollY > 500;
-    });
+    window.addEventListener("scroll", handleScroll);
   });
 
   function scrollToTop() {
