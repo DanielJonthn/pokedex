@@ -300,7 +300,7 @@
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background-color: var(--card-bg);
     border: 1px solid #ddd;
     padding: 16px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);

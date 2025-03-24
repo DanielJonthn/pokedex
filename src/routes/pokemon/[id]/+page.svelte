@@ -4,6 +4,8 @@
   import type { PageData } from "./$types";
   import TypeBadge from "$lib/components/TypeBadge.svelte";
   import { browser } from "$app/environment";
+  import { theme } from "$lib/stores/themeStore";
+  import Footer from "$lib/components/Footer.svelte";
 
   export let data: PageData;
 
@@ -44,6 +46,10 @@
   const calculateStatPercent = (value: number): number => {
     return Math.min(Math.max((value / 255) * 100, 5), 100);
   };
+
+  function toggleTheme() {
+    theme.update((current) => (current === "light" ? "dark" : "light"));
+  }
 </script>
 
 <div class="pokemon-detail-container">
@@ -54,22 +60,68 @@
     </div>
   {:else}
     <div class="detail-header">
-      <button class="back-button" on:click={goBack}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+      <div class="header-top">
+        <button class="back-button" on:click={goBack}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+
+        <button
+          class="theme-toggle"
+          on:click={toggleTheme}
+          aria-label="Toggle theme"
         >
-          <path d="M19 12H5M12 19l-7-7 7-7" />
-        </svg>
-        Back
-      </button>
+          {#if $theme === "light"}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          {:else}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          {/if}
+        </button>
+      </div>
 
       <h1>
         <span class="pokemon-name">{pokemon.name}</span>
@@ -161,7 +213,16 @@
   {/if}
 </div>
 
+<Footer />
+
 <style>
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
   .pokemon-detail-container {
     max-width: 1000px;
     margin: 0 auto;
@@ -193,6 +254,8 @@
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 15px;
+    border-color: var(--spinner-border);
+    border-top-color: var(--primary-color);
   }
 
   .detail-header {
@@ -229,12 +292,12 @@
   .pokemon-name {
     font-size: 2.5rem;
     text-transform: capitalize;
-    color: #333;
+    color: var(--text-color);
   }
 
   .pokemon-id {
     font-size: 1.5rem;
-    color: #666;
+    color: var(--text-color);
     font-weight: normal;
   }
 
@@ -313,10 +376,10 @@
   }
 
   .details-card {
-    background: white;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 8px var(--card-shadow);
   }
 
   .card-section {
@@ -331,7 +394,7 @@
   h2 {
     margin: 0 0 15px 0;
     font-size: 1.3rem;
-    color: #3d7dca;
+    color: var(--primary-color);
     position: relative;
     padding-bottom: 8px;
   }
@@ -362,12 +425,13 @@
 
   .stat-name {
     font-weight: bold;
-    color: #555;
+    color: var(--text-color);
   }
 
   .stat-value {
     font-weight: bold;
     text-align: right;
+    color: var(--text-color);
   }
 
   .stat-bar {
@@ -409,7 +473,7 @@
 
   .more-moves {
     font-size: 14px;
-    color: #666;
+    color: var(--text-color);
     display: flex;
     align-items: center;
     padding: 6px 12px;

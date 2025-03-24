@@ -6,6 +6,8 @@
   import FilterBar from "$lib/components/FilterBar.svelte";
   import { initializeStores, filterStore } from "$lib/stores/pokemonStore";
   import { fly, fade } from "svelte/transition";
+  import { theme } from "$lib/stores/themeStore";
+  import Footer from "$lib/components/Footer.svelte";
 
   export let data: PageData;
 
@@ -51,15 +53,13 @@
 
   // Infinite Scroll
   let visiblePokemon: IndexPokemon[] = [];
-  let pageSize = 24; // Show 24 Pokémon at a time
+  let pageSize = 24;
   let currentPage = 1;
   let isLoadingMore = false;
   let hasMore = true;
 
-  // Initialize the visible Pokémon
   $: {
     if (filteredPokemon) {
-      // Reset pagination when filters change
       if (
         visiblePokemon.length > 0 &&
         visiblePokemon[0]?.id !== filteredPokemon[0]?.id
@@ -73,17 +73,14 @@
     }
   }
 
-  // Function to load more Pokémon
   async function loadMorePokemon() {
     if (isLoadingMore || !hasMore) return;
 
     isLoadingMore = true;
 
     try {
-      // Simulate a delay for loading effect
       await new Promise((resolve) => setTimeout(resolve, 300));
 
-      // Increment the page and update visiblePokemon
       currentPage++;
       visiblePokemon = filteredPokemon.slice(0, pageSize * currentPage);
       hasMore = visiblePokemon.length < filteredPokemon.length;
@@ -92,7 +89,6 @@
     }
   }
 
-  // Intersection Observer for infinite scroll
   let observerTarget: HTMLDivElement;
 
   onMount(() => {
@@ -103,7 +99,7 @@
           loadMorePokemon();
         }
       },
-      { rootMargin: "200px" } // Load more when within 200px of the bottom
+      { rootMargin: "200px" }
     );
 
     if (observerTarget) {
@@ -120,18 +116,20 @@
   let showScrollButton = false;
 
   onMount(() => {
-    // Detect scroll position for showing/hiding the button
     window.addEventListener("scroll", () => {
       showScrollButton = window.scrollY > 500;
     });
   });
 
-  // Function to smoothly scroll to top
   function scrollToTop() {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+  }
+
+  function toggleTheme() {
+    theme.update((current) => (current === "light" ? "dark" : "light"));
   }
 </script>
 
@@ -145,10 +143,57 @@
 
 <div class="pokedex-container">
   <header>
-    <div class="logo-container" in:fly={{ y: -20, duration: 500 }}>
-      <div class="pokeball"></div>
-      <h1>Pokédex</h1>
+    <div class="header-top">
+      <div class="logo-container" in:fly={{ y: -20, duration: 500 }}>
+        <div class="pokeball"></div>
+        <h1>Pokédex</h1>
+      </div>
+
+      <button
+        class="theme-toggle"
+        on:click={toggleTheme}
+        aria-label="Toggle theme"
+      >
+        {#if $theme === "light"}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        {:else}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        {/if}
+      </button>
     </div>
+
     <p class="subtitle" in:fly={{ y: -10, duration: 500, delay: 200 }}>
       Explore the world of Pokémon
     </p>
@@ -177,13 +222,6 @@
       </button>
     </div>
   {:else}
-    <!-- <div class="pokemon-grid" in:fade={{ duration: 300 }}>
-      {#each filteredPokemon as pokemon, i (pokemon.id)}
-        <div in:fly={{ y: 20, duration: 300, delay: (i % 10) * 50 }}>
-          <PokemonCard {pokemon} />
-        </div>
-      {/each}
-    </div> -->
     <div class="pokemon-grid" in:fade={{ duration: 300 }}>
       {#each visiblePokemon as pokemon, i (pokemon.id)}
         <div in:fly={{ y: 20, duration: 300, delay: (i % 10) * 50 }}>
@@ -192,7 +230,6 @@
       {/each}
     </div>
 
-    <!-- Loading indicator at the bottom -->
     {#if hasMore}
       <div class="load-more-container" bind:this={observerTarget}>
         <div class="spinner small"></div>
@@ -205,16 +242,7 @@
     {/if}
   {/if}
 
-  <footer>
-    <p>
-      Created by
-      <a
-        href="https://github.com/DanielJonthn/pokedex"
-        target="_blank"
-        rel="noopener noreferrer">Daniel Jonathan</a
-      >
-    </p>
-  </footer>
+  <Footer />
 
   {#if showScrollButton}
     <button
@@ -242,6 +270,13 @@
 </div>
 
 <style>
+  .header-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
   .pokedex-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -296,13 +331,13 @@
   h1 {
     font-size: 2.5rem;
     margin: 0;
-    color: #3d7dca;
+    color: var(--primary-color);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     font-weight: 700;
   }
 
   .subtitle {
-    color: #666;
+    color: var(--text-color);
     margin-top: 5px;
     margin-bottom: 5px;
     font-size: 1.1rem;
@@ -343,6 +378,8 @@
     height: 40px;
     animation: spin 1s linear infinite;
     margin-bottom: 20px;
+    border-color: var(--spinner-border);
+    border-top-color: var(--primary-color);
   }
 
   .no-results button {
@@ -362,24 +399,6 @@
   .no-results button:hover {
     background-color: #2a5a9c;
     transform: translateY(-2px);
-  }
-
-  footer {
-    text-align: center;
-    padding: 20px 0;
-    margin-top: auto;
-    color: #666;
-  }
-
-  footer a {
-    color: #3d7dca;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  footer a:hover {
-    color: #2a5a9c;
-    text-decoration: underline;
   }
 
   /* Infinite Scroll */

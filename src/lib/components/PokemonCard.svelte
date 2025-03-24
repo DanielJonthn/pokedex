@@ -38,7 +38,8 @@
     width: 180px;
     margin: 12px;
     padding: 16px;
-    background-color: white;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 8px var(--card-shadow);
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition:
@@ -60,7 +61,7 @@
     top: 10px;
     left: 10px;
     font-size: 0.9rem;
-    color: #777;
+    color: var(--text-color);
     font-weight: bold;
   }
 
