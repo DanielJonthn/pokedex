@@ -144,10 +144,16 @@
   });
 
   function scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    const scrollToTopWithRAF = () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > 0) {
+        const easeOutScroll = currentScroll * 0.8;
+        window.scrollTo(0, easeOutScroll);
+        requestAnimationFrame(scrollToTopWithRAF);
+      }
+    };
+
+    requestAnimationFrame(scrollToTopWithRAF);
   }
 
   function toggleTheme() {
