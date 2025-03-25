@@ -22,7 +22,7 @@ async function fetchWithCache(url: string) {
   return data;
 }
 
-export async function fetchPokemon(limit = 151): Promise<IndexPokemon[]> {
+export async function fetchPokemon(limit = 1510): Promise<IndexPokemon[]> {
   try {
     const data = await fetchWithCache(
       `https://pokeapi.co/api/v2/pokemon?limit=${limit}`
