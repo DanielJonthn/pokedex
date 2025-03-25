@@ -1,4 +1,4 @@
-import { fetchPokemonByRegion } from "$lib/api/pokemon";
+import { fetchPokemonByGeneration } from "$lib/api/pokemon";
 
 export type Generation = {
   id: number;
@@ -62,9 +62,7 @@ export const generations: Generation[] = [
 export async function loadPokemonSpecies() {
   for (const gen of generations) {
     if (!gen.pokemon_species) {
-      gen.pokemon_species = await fetchPokemonByRegion(
-        gen.main_region.toLowerCase()
-      );
+      gen.pokemon_species = await fetchPokemonByGeneration(gen.id);
     }
   }
   return generations;

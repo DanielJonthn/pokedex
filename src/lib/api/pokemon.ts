@@ -91,14 +91,16 @@ export async function fetchPokemonDetails(
   }
 }
 
-export async function fetchPokemonByRegion(region: string): Promise<string[]> {
+export async function fetchPokemonByGeneration(
+  genID: number
+): Promise<string[]> {
   try {
     const data = await fetchWithCache(
-      `https://pokeapi.co/api/v2/pokedex/${region.toLowerCase()}`
+      `https://pokeapi.co/api/v2/generation/${genID}`
     );
-    return data.pokemon_entries.map((entry: any) => entry.pokemon_species.name);
+    return data.pokemon_species.map((species: any) => species.name);
   } catch (error) {
-    console.error(`Error fetching Pokemon for region ${region}:`, error);
+    console.error(`Error fetching Pokemon for generation ${genID}:`, error);
     return [];
   }
 }
